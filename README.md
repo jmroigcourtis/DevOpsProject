@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# DevOpsProject
-Small project for practice DevOps skills
-=======
 # DevOps Project
 
 This project uses Docker, Docker Compose, and Node.js (version 18). Follow the instructions below to start the project.
@@ -63,4 +59,3 @@ This project uses Docker, Docker Compose, and Node.js (version 18). Follow the i
 ## License
 
 This project is licensed under the MIT License.
->>>>>>> FirstBranch
