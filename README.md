@@ -7,6 +7,7 @@ This project uses Docker, Docker Compose, and Node.js (version 18). Follow the i
 - Docker
 - Docker Compose
 - Node.js v18
+- Nodemon
 
 ## Setup
 
@@ -20,15 +21,18 @@ This project uses Docker, Docker Compose, and Node.js (version 18). Follow the i
 2. Create a `.env` file in the project's root directory with the following environment variables:
 
    ```bash
-   ME_CONFIG_MONGODB_ADMINUSERNAME=<admin-username>
-   ME_CONFIG_MONGODB_ADMINPASSWORD=<admin-password>
-   MONGO_INITDB_ROOT_USERNAME=<root-username>
-   MONGO_INITDB_ROOT_PASSWORD=<root-password>
-   ME_CONFIG_MONGODB_URL=mongodb://<user>:<password>@<mongoport>/local?<options>
-   ME_CONFIG_MONGODB_SERVER=mongo
-   MONGO_PORT=27017:27017
-   MONGO_EXPRESS_PORT=8081:8081
-   PORT=3006
+      ME_CONFIG_MONGODB_ADMINUSERNAME=<username>
+      ME_CONFIG_MONGODB_ADMINPASSWORD=<pass>
+      ME_CONFIG_MONGODB_SERVER=mongo
+      ME_CONFIG_MONGODB_URL=mongodb://<user>:<password>@<servicename>:<port>/<db>?authSource=admin
+      MONGO_URI=mongodb://<servicename>:<port>/<db>
+      MONGO_INITDB_ROOT_USERNAME=<username>
+      MONGO_INITDB_ROOT_PASSWORD=<pass>
+      MONGO_EXPRESS_PORT=<port:port>
+      MONGO_HOST_NAME=mongo
+      MONGO_PORT=<port>:<port>
+      NODE_SERVICE_PORT=<port>:<port>
+      PORT=<port>
    ```
 
 ## Start the Project
@@ -41,11 +45,12 @@ This project uses Docker, Docker Compose, and Node.js (version 18). Follow the i
    docker-compose up --build
    ```
 
-3. The server will be available at `http://localhost:3006`, Mongo Express at `http://localhost:8081`, and the database on port `27017`.
+3. The server will be available at `http://localhost:PORT`, Mongo Express at `http://localhost:MONGO_EXPRESS_PORT`, and the database on port `MONGO_PORT`.
 
 ## Technologies
 
 - **Node.js** (v18)
+- **Nodemon**
 - **Docker**
 - **Docker Compose**
 - **MongoDB**
