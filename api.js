@@ -6,24 +6,42 @@ const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT;
+const { ME_CONFIG_MONGODB_URL } = process.env;
 
 // Conectar a MongoDB
-mongoose.connect("0.0.0.0:27017")
-    .then(() => console.log('Conectado a MongoDB'))
-    .catch(err => console.error('Error de conexión a MongoDB:', err));
+const url = "mongodb://jroig:fito80@localhost:27017/db?authSource=jroig&w=";
 
-// Esquema y modelo de ejemplo
+const connectDB = async () => {
+    try {
+        mongoose.Promise = global.Promise;
+        // Conectarse a MongoDB usando la URL desde las variables de entorno
+        await mongoose.connect("mongodb://mongo:27017/my-db", {
+            poolSize: 10,
+            authSource: "admin",
+            user: "juan",
+            pass: "fito80",
+            useMongoClient: true,
+        }).then(() => {"Connected success"})
+    } catch (err) {
+        console.error('Error connecting to MongoDB:', err.message);
+        process.exit(1);  // Detener el proceso si falla la conexión
+    }
+};
+
+connectDB();
+
 const ItemSchema = new mongoose.Schema({
     name: String,
-    description: String,
+    lastName: String,
+    status: String
 });
 
-const Item = mongoose.model('Item', ItemSchema);
+const Item = mongoose.model('users', ItemSchema);
 
 // CRUD
 
 // Crear un item
-app.post('/items', async (req, res) => {
+app.post('/my-db/users', async (req, res) => {
     try {
         const item = new Item(req.body);
         await item.save();
@@ -34,7 +52,7 @@ app.post('/items', async (req, res) => {
 });
 
 // Leer todos los items
-app.get('/items', async (req, res) => {
+app.get('/my-db/users', async (req, res) => {
     try {
         const items = await Item.find();
         console.log(items)
@@ -45,7 +63,7 @@ app.get('/items', async (req, res) => {
 });
 
 // Leer un item por ID
-app.get('/items/:id', async (req, res) => {
+app.get('/my-db/users/:id', async (req, res) => {
     try {
         const item = await Item.findById(req.params.id);
         if (!item) return res.status(404).send();
@@ -56,7 +74,7 @@ app.get('/items/:id', async (req, res) => {
 });
 
 // Actualizar un item
-app.patch('/items/:id', async (req, res) => {
+app.patch('/my-db/users/:id', async (req, res) => {
     try {
         const item = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!item) return res.status(404).send();
@@ -67,7 +85,7 @@ app.patch('/items/:id', async (req, res) => {
 });
 
 // Eliminar un item
-app.delete('/items/:id', async (req, res) => {
+app.delete('/my-db/users/:id', async (req, res) => {
     try {
         const item = await Item.findByIdAndDelete(req.params.id);
         if (!item) return res.status(404).send();
