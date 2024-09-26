@@ -4,10 +4,14 @@ services:
     restart: always
     container_name: mongo
     ports:
-      - "27017:27017"  # Asegúrate de que haya comillas y espacio después del guion
+      - ${MONGO_PORT}  
+    expose:
+      - ${MONGO_PORT}
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongoStorageVol:/data/db:rw
 
   mongo-express:
     image: mongo-express
@@ -16,25 +20,28 @@ services:
       - mongo
     restart: always
     ports:
-      - "8081:8081"  # Asegúrate de que haya comillas y espacio después del guion
+      - ${MONGO_EXPRESS_PORT} 
+    expose:
+      - ${MONGO_EXPRESS_PORT}
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${ME_CONFIG_MONGODB_ADMINUSERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${ME_CONFIG_MONGODB_ADMINPASSWORD}
       ME_CONFIG_MONGODB_SERVER: ${ME_CONFIG_MONGODB_SERVER}
       ME_CONFIG_BASICAUTH: "false"
-  api:
-    build: .
+  node-api:
     tty: true
-    container_name: API
-    working_dir: /Dockerbuildfiles
     image: node:18-alpine
-    command: "npm install dotenv && npm install express && npm install mongoose && node api.js"
+    build: .
+    container_name: node-api
+    working_dir: /DevOpsProject
     ports:
-      - "3000:3000"  # Asegúrate de que haya un espacio después del guion
+      - 3000:3000
     env_file:
       - .env
-    environment:
-      - MONGO_URI=${ME_CONFIG_MONGODB_URL}
     depends_on:
-      - mongo-express
-
+      - mongo
+    links:
+      - mongo
+volumes:
+  mongoStorageVol:
+    driver: local 
