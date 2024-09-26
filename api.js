@@ -5,21 +5,20 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 
-const PORT = process.env.PORT;
-const { ME_CONFIG_MONGODB_URL } = process.env;
+
+const { MONGO_URI, MONGO_INITDB_ROOT_USERNAME, MONGO_INITDB_ROOT_PASSWORD, PORT  } = process.env
 
 // Conectar a MongoDB
-const url = "mongodb://jroig:fito80@localhost:27017/db?authSource=jroig&w=";
 
 const connectDB = async () => {
     try {
         mongoose.Promise = global.Promise;
         // Conectarse a MongoDB usando la URL desde las variables de entorno
-        await mongoose.connect("mongodb://mongo:27017/my-db", {
+        await mongoose.connect(MONGO_URI, {
             poolSize: 10,
             authSource: "admin",
-            user: "juan",
-            pass: "fito80",
+            user: MONGO_INITDB_ROOT_USERNAME,
+            pass: MONGO_INITDB_ROOT_PASSWORD,
             useMongoClient: true,
         }).then(() => {"Connected success"})
     } catch (err) {
