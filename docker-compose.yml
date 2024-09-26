@@ -31,17 +31,15 @@ services:
   node-api:
     tty: true
     image: node:18-alpine
-    build: .
     container_name: node-api
+    build: .
     working_dir: /DevOpsProject
     ports:
-      - 3000:3000
-    env_file:
-      - .env
+      - ${NODE_SERVICE_PORT}
+    environment:
+      NODE_SERVICE_PORT: ${NODE_SERVICE_PORT}
     depends_on:
-      - mongo
-    links:
-      - mongo
+      - mongo-express
 volumes:
   mongoStorageVol:
     driver: local 
