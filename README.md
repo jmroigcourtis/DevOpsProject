@@ -1,8 +1,9 @@
-# DevOps Project
+# Quick Node app CRUD and MongoDB with Docker
 
 This project uses Docker, Docker Compose, and Node.js (version 18). Follow the instructions below to start the project.
 
 ## Requirements
+
 
 - Docker
 - Docker Compose
